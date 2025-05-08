@@ -72,7 +72,7 @@ class JWTClient
      *
      * @return array|string
      */
-    public function sendRequest(string $method = 'get', string $url, array $config = [], bool $paginate = false)
+    public function sendRequest(string $method, string $url, array $config = [], bool $paginate = false)
     {
         // If URL has host we shouldn't use tenant baseUrl
         $baseUrl = preg_match('/^https?\:\/\//', $url) ? null : $this->tenant->base_url;
@@ -80,7 +80,7 @@ class JWTClient
         // If base url contains path, Guzzle client will truncate it
         // So we need to keep it and append to the request URL
         $baseUrlPath = parse_url($baseUrl, PHP_URL_PATH);
-        $url = rtrim($baseUrlPath, '/') . '/' . ltrim($url, '/');
+        $url = rtrim($baseUrlPath ?? '', '/') . '/' . ltrim($url, '/');
 
         $clientConfig = array_merge(['base_uri' => $baseUrl], $config);
 
